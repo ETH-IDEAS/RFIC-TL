@@ -8,7 +8,7 @@
 <table>
   <tr>
     <td style="vertical-align: middle;">
-      <img src="figures/ideas_eth.png" alt="Fig. 1: Transformer Basics" style="height:80px; object-fit:contain;">
+      <img src="figures/ideas_eth.jpg" alt="Fig. 1: Transformer Basics" style="height:80px; object-fit:contain;">
     </td>
     <td style="vertical-align: middle;">
       <h1 style="margin:0;">RFIC-TL: End-to-End Transfer Learning Framework for RFIC Passives</h1>
@@ -34,7 +34,7 @@ If you find this repository helpful, please cite our work.
   doi={10.1109/IMS40175.2024.10600344}}
 ```
 
-**Data generation** is the ***fuel*** for the training deep learning neural networks. The advancements in the IC ***specs-to-layout*** challenge still heavily depend on EM simulators for accurate training data, which inevitably leads to high computational costs.This framework demonstrates the reduction of data generation necessary by leveraging transfer learning.
+**Data generation** is the ***fuel*** for training deep learning neural networks. Despite the advancements in the IC ***specs-to-layout*** challenge, accurate training data still heavily relies on EM simulators—inevitably incurring high computational costs. By leveraging transfer learning, this framework demonstrates the **reduction** of data generation necessary for effective model training.
 
 The open-sourced code for the transfer learning framework can be applied to processes including but not limited to:
 - Silicon technologies
