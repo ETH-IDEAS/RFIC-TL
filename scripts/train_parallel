@@ -1,0 +1,90 @@
+#!/bin/bash
+
+cmds=()
+
+tau=0.5
+
+# for src in 0.25 0.5 0.75
+# for technology in NodeA NodeB
+# for metal in MetalOptionA MetalOptionB
+# for freq in FreqA FreqB
+for des in 0.2
+do
+    for netname in Cascade_512
+    do
+        # for data_type in NodeA_MetalOptionA_FreqA NodeB_MetalOptionA_FreqA NodeB_MetalOptionB_FreqA NodeB_MetalOptionB_FreqA NodeB_MetalOptionB_FreqB
+        for data_type in "NodeB_MetalOptionA_FreqA_$des" "NodeB_MetalOptionB_FreqA_$des"  "NodeB_MetalOptionA_FreqB_$des" "NodeB_MetalOptionB_FreqB_$des"
+        # for data_type in NodeA_MetalOptionA_FreqA_0.25 NodeA_MetalOptionA_FreqA_0.5 NodeA_MetalOptionA_FreqA_0.75
+        # for data_type in "NodeB_MetalOptionB_FreqA_$des"  "NodeB_MetalOptionB_FreqB_$des"
+        # for data_type in NodeA_MetalOptionA_FreqA_${src}_coarse
+        do
+            c="python train.py --netname $netname --data_type $data_type --tau $tau"
+            cmds+=("$c")
+        done
+    done
+done
+
+
+# for des in 0.005 0.01 0.05 1
+for des in 0.2
+do
+    for netname in Cascade_512
+    do
+        # for data_type in NodeA_MetalOptionA_FreqA NodeB_MetalOptionA_FreqA NodeB_MetalOptionB_FreqA NodeB_MetalOptionB_FreqA NodeB_MetalOptionB_FreqB
+        for data_type in "NodeB_MetalOptionA_FreqA_$des" "NodeB_MetalOptionB_FreqA_$des"  "NodeB_MetalOptionA_FreqB_$des" "NodeB_MetalOptionB_FreqB_$des"
+        # for data_type in NodeA_MetalOptionA_FreqA_0.25 NodeA_MetalOptionA_FreqA_0.5 NodeA_MetalOptionA_FreqA_0.75
+        # for data_type in "NodeB_MetalOptionB_FreqA_$des"  "NodeB_MetalOptionB_FreqB_$des"
+        do
+            for src_sparsity in 0.25 0.5 0.75 1
+            do
+                c="python NodeAtoNodeB.py --netname $netname --data_type $data_type --load-model models/scratch/NodeA_MetalOptionA_FreqA_${src_sparsity}/$netname/Epoch_300/tau_0.5/model.pt --tau $tau --save_root models/transfer/fine_grid/source_${src_sparsity}"
+                cmds+=("$c")
+            done
+        done
+    done
+done
+
+
+
+gpu_list=(0 1 2 3 4 5 6)
+
+# do not change the following lines
+
+num_gpus=${#gpu_list[@]}
+num_cmds=${#cmds[@]}
+echo "Commands in total will run: $num_cmds"
+echo "Number of parallel tasks for each GPU?"
+read max_parallel_task
+echo "Estimated time for each process in secs?"
+read estimation
+secs=$(($estimation * $num_cmds / $max_parallel_task / $num_gpus))
+echo "Your estimated execution time:"
+
+printf '%02dh:%02dm:%02fs\n' $(echo -e "$secs/3600\n$secs%3600/60\n$secs%60"| bc)
+
+echo "Running in a screen is highly recommended. Proceed? y/n: "
+read decision
+
+if [ $decision != "y" ]
+then
+    exit
+else
+    echo "Your job will start now. Good luck!"
+    sleep 1
+fi
+
+
+gpu_prefix="CUDA_VISIBLE_DEVICES"
+
+for ((i = 0; i < ${#cmds[@]}; i++))
+do
+    gpu_index="$(($i % ($num_gpus * $max_parallel_task) ))"
+    c="$gpu_prefix=${gpu_list[$(($gpu_index / $max_parallel_task))]} ${cmds[$i]}"
+    if [ "$(( $(($i + 1)) % $(($num_gpus * $max_parallel_task)) ))" == "0" ] || [ "$(($i + 1))" == $num_cmds ]
+    then
+        true
+    else
+        c="$c &"
+    fi
+    eval " $c"
+done
