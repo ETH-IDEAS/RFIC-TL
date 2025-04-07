@@ -18,6 +18,13 @@
 
 **RFIC-TL** is an end-to-end learning framework designed to enable knowledge transfer for design migrations of mm-Wave passives in RF integrated circuits (RFICs). This framework can effectively accelerate design adaptation across different IC technologies, operating frequencies, and metal options by leveraging a pre-trained neural network model. It is demonstrated through a 1:1 on-chip transformer-based impedance matching network for case study.
 
+**Data generation** is the ***fuel*** for training deep learning neural networks. Despite the advancements in the IC ***specs-to-layout*** challenge, accurate training data still heavily relies on EM simulators—inevitably incurring high computational costs. By leveraging transfer learning, this framework demonstrates the **reduction** of data generation necessary for effective model training.
+
+The open-sourced code for the transfer learning framework can be applied to processes including but not limited to:
+- Silicon technologies
+- III-V compound semiconductors
+- PCB-based manufacturing processes
+
 ## Authors & Citation
 If you find this repository helpful, please cite our work.
 - [IMS 2024] [Transfer Learning Assisted Fast Design Migration Over Technology Nodes: A Study on Transformer Matching Network](https://ieeexplore.ieee.org/document/10600344)
@@ -33,13 +40,6 @@ If you find this repository helpful, please cite our work.
   keywords={Training;Passive networks;Adaptation models;Transfer learning;Metals;Artificial neural networks;Transformers;Deep learning;design technologies;direction synthesis;impedance matching;mm-Wave;source domain;target domain;training data;transfer learning;transformer},
   doi={10.1109/IMS40175.2024.10600344}}
 ```
-
-**Data generation** is the ***fuel*** for training deep learning neural networks. Despite the advancements in the IC ***specs-to-layout*** challenge, accurate training data still heavily relies on EM simulators—inevitably incurring high computational costs. By leveraging transfer learning, this framework demonstrates the **reduction** of data generation necessary for effective model training.
-
-The open-sourced code for the transfer learning framework can be applied to processes including but not limited to:
-- Silicon technologies
-- III-V compound semiconductors
-- PCB-based manufacturing processes
 
 ## Environment Setup
 
