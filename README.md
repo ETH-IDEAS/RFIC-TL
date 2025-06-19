@@ -68,6 +68,33 @@ pip uninstall neptune
 ## Data Availability
 The training data is proprietary since it is trained on the process design kit of the chip foundry (which is proprietary). However, the code is open-sourced and can be used with any other dataset.
 
+## Example Data Release (Fictitious Process: NodeA & NodeB)
+
+We are releasing example datasets generated using a **fictitious process**, featuring two nodes: **NodeA** and **NodeB**.  
+These nodes represent different substrate characteristics and thicknesses, enabling diverse modeling and transfer learning studies.
+
+**Note:** All released data files are organized in subfolders under `data/` (e.g., `data/nodeA_GNRN_30GHz/`).
+Each dataset file name follows this format: {process}{metal selections}{frequency}
+
+For example,  
+`nodeA_GNRN_30GHz` represents:
+- **Process:** nodeA
+- **Metal selections:** GNRN (with “GN” and “RN” denoting the low and upper coils of the on-chip transformer for nodeA)
+- **Frequency:** 30 GHz
+
+For **nodeB**, `VT` refers to the top metal layer, and `GN`/`RN` refer to lower layers (e.g., `nodeB_GNVT`, `nodeB_RNVT` for metal combination options).
+
+**Data Descriptions**
+#### `x_data.npy` for Design Parameters
+- **Shape:** (N, 4)
+- **Columns:** `C1`, `C2`, `RealZin`, `ImageZin`
+#### `y_data.npy` for Circuit Parameters
+- **Shape:** (N, 6)
+- **Columns:** `Lp`, `Ls`, `k`, `SRF(GHZ)`, `Qp`, `Qs`
+#### `z_data.npy` for Physical Parameters
+- **Shape:** (N, 6)
+- **Columns:** `wlow`, `wup`, `r0`, `r1`, `xgnd`, `lfeed`
+
 ## Preprocess
 
 The following command loads data stored in csv format and convert into npy. It separates X, Y and Z.
